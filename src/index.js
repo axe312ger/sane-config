@@ -1,12 +1,11 @@
-const { resolve, dirname } = require('path')
+const { resolve } = require('path')
 const { readdirSync } = require('fs')
 const findRoot = require('find-root')
 const Debug = require('Debug')
 const { validate } = require('jsonschema')
 
 const debug = Debug('config')
-const processDir = dirname(process.mainModule.filename)
-const root = findRoot(processDir)
+const root = findRoot(process.cwd())
 const packageJSON = require(resolve(root, 'package.json'))
 const DEFAULT_DIR = resolve(root, 'config')
 const configMode = [
@@ -18,7 +17,7 @@ const configFileRegex = new RegExp(`^(.+)\\.(${configMode.join('|')})\\.js(?:on)
 const schemaFileRegex = new RegExp(`^(.+)\\.schema\\.json$`)
 
 const configDirectory = packageJSON.hasOwnProperty('configDirectory')
-  ? resolve(processDir, packageJSON['configDirectory'])
+  ? resolve(root, packageJSON['configDirectory'])
   : DEFAULT_DIR
 
 debug(`Reading configuration from ${configDirectory}`)
