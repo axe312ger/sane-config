@@ -1,6 +1,6 @@
 {
   "name": "sane-config",
-  "version": "0.0.0",
+  "version": "0.0.0-semantic-release",
   "description": "Simple and sane configuration management.",
   "main": "dist/index.js",
   "scripts": {
