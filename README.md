@@ -15,9 +15,55 @@ yarn add sane-config || npm install --save sane-config
 
 ## Preparations
 
-## Configuration
+Store your configuration files in a directory called `config` in your project root.
+If you prefer some other location, just set the `configDirectory` property in your
+`package.json` to whatever you like. Can be relative or absolute.
+
+Your configuration files must follow this naming structure:
+
+`[section].[level].[ext]`
+
+* **section:** might be anything you want. This will reflect the name for this
+part of your configuration. Use it for basic separation.
+* **level:** indicates the level or priority of the file. The module will load and
+merge the configurations in the following order:
+  * default
+  * `process.env.NODE_ENV`
+  * local
+* **ext:** may be `js` or `json`
+
+Like this, you can add `paths.default.js` to your repository while the production environment easily uses the `paths.production.js` and others can overwrite configs at any time with a `paths.local.js`
 
 ## Usage
+
+```js
+import config from 'sane-config'
+
+// Will log the value of 'anyProperty' from section.default.js
+console.log(config.section.anyProperty)
+```
+
+### with webpack
+
+Just add it as global via DefinePlugin. This ensures it only runs once and stores
+the final config in your app.
+
+```js
+new Webpack.DefinePlugin({
+  APP_CONFIG: JSON.stringify(config)
+})
+```
+
+Makre sure that you don't forget the `JSON.stringify()`
+
+## Validation
+sane-config also provides a way to validate your configuration. In later states of your project, this can help a lot to ensure configuration of new or long-time inactive team members are up to date.
+
+Just add a json file with [JSON Schema](http://json-schema.org/) information next to your configuration files. It must follow this naming structure:
+
+`[section].schema.json`
+
+The generator at http://jsonschema.net/ might help you to create your first schema definition.
 
 ## Development
 
