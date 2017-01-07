@@ -2,7 +2,7 @@ const { resolve } = require('path')
 const { readdirSync } = require('fs')
 const { argv } = require('yargs')
 const findRoot = require('find-root')
-const Debug = require('Debug')
+const Debug = require('debug')
 const { validate } = require('jsonschema')
 
 const debug = Debug('config')
