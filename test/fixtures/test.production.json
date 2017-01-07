@@ -1,0 +1,4 @@
+{
+  "requiredProperty": "production",
+  "shouldBeProduction": "production"
+}

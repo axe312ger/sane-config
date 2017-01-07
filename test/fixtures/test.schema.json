@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "requiredProperty": {
+      "type": "string"
+    },
+    "shouldStayDefault": {
+      "type": "string"
+    },
+    "shouldBeProduction": {
+      "type": "string"
+    },
+    "shouldBeLocal": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "requiredProperty"
+  ]
+}
