@@ -2564,12 +2564,6 @@ last-line-stream@^1.0.0:
   dependencies:
     through2 "^2.0.0"
 
-last-release-git@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/last-release-git/-/last-release-git-0.0.2.tgz#a215e8a188639899929ce291e49228e2ec35d628"
-  dependencies:
-    semver "^5.3.0"
-
 latest-version@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/latest-version/-/latest-version-2.0.0.tgz#56f8d6139620847b8017f8f1f4d78e211324168b"

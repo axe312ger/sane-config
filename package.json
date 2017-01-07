@@ -51,7 +51,6 @@
     "eslint-plugin-babel": "^4.0.0",
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^2.0.1",
-    "last-release-git": "^0.0.2",
     "nyc": "^10.0.0",
     "semantic-release": "^6.3.2"
   },
@@ -60,8 +59,7 @@
     "jsonschema": "^1.1.1"
   },
   "release": {
-    "verifyConditions": "condition-circle",
-    "getLastRelease": "last-release-git"
+    "verifyConditions": "condition-circle"
   },
   "config": {
     "commitizen": {
