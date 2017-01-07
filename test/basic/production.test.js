@@ -1,7 +1,7 @@
 import test from 'ava'
 
 process.env.NODE_ENV = 'production'
-const config = require('../src/index.js')
+const config = require('../../src')
 
 test('test cascadation with production environment', (t) => {
   t.is(config.test.shouldStayDefault, 'default')

@@ -67,7 +67,7 @@
       "path": "./node_modules/cz-conventional-changelog"
     }
   },
-  "configDirectory": "./test/fixtures",
+  "configDirectory": "./test/basic/fixtures",
   "ava": {
     "require": [
       "babel-register"

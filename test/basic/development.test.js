@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import config from '../src/index.js'
+const config = require('../../src')
 
 test('test cascadation with development environment', (t) => {
   t.is(config.test.shouldStayDefault, 'default')

@@ -77,9 +77,15 @@ const config = configFiles.reduce((config, file) => {
   if (schemas.has(section)) {
     const validation = validate(fileConfig, schemas.get(section))
     if (validation.errors.length) {
-      debug(`Found ${validation.errors.length} validation errors in ${name}:`)
+      const message = `Found ${validation.errors.length} validation errors in ${name}`
+      debug(`${message}:`)
       validation.errors.map((error) => debug(error.message))
-      process.exit(1)
+      if (validation.errors.length === 1) {
+        throw validation.errors[0]
+      }
+      const error = new Error(message)
+      error.errors = validation.errors
+      throw error
     }
   }
 
