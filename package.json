@@ -56,7 +56,8 @@
   },
   "dependencies": {
     "find-root": "^1.0.0",
-    "jsonschema": "^1.1.1"
+    "jsonschema": "^1.1.1",
+    "yargs": "^6.6.0"
   },
   "release": {
     "verifyConditions": "condition-circle"

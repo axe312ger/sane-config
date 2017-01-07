@@ -1,5 +1,6 @@
 const { resolve } = require('path')
 const { readdirSync } = require('fs')
+const { argv } = require('yargs')
 const findRoot = require('find-root')
 const Debug = require('Debug')
 const { validate } = require('jsonschema')
@@ -16,9 +17,9 @@ const configMode = [
 const configFileRegex = new RegExp(`^(.+)\\.(${configMode.join('|')})\\.js(?:on)?$`)
 const schemaFileRegex = new RegExp(`^(.+)\\.schema\\.json$`)
 
-const configDirectory = packageJSON.hasOwnProperty('configDirectory')
-  ? resolve(root, packageJSON['configDirectory'])
-  : DEFAULT_DIR
+const packageDirectory = packageJSON.hasOwnProperty('configDirectory') ? resolve(root, packageJSON['configDirectory']) : null
+const customDirectory = argv.configDirectory || packageDirectory
+const configDirectory = customDirectory || DEFAULT_DIR
 
 debug(`Reading configuration from ${configDirectory}`)
 
