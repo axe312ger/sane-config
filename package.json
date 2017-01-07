@@ -55,6 +55,7 @@
     "semantic-release": "^6.3.2"
   },
   "dependencies": {
+    "debug": "^2.6.0",
     "find-root": "^1.0.0",
     "jsonschema": "^1.1.1",
     "yargs": "^6.6.0"
