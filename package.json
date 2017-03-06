@@ -66,9 +66,11 @@
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
+    },
+    "sane-config": {
+      "directory": "./test/basic/fixtures"
     }
   },
-  "configDirectory": "./test/basic/fixtures",
   "ava": {
     "require": [
       "babel-register"

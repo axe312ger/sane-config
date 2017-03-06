@@ -20,7 +20,7 @@ yarn add sane-config || npm install --save sane-config
 Store your configuration files in a directory called `config` in your project root.
 If you prefer some other location, you have two options:
 
-* Set the `configDirectory` property in your `package.json` to whatever you like.
+* Set the `config['sane-config'].directory` parameter in your `package.json` [config object](https://docs.npmjs.com/files/package.json#config) to whatever you like.
 * Add the `--configurationDirectory` argument to your process call
 
 Hint: The path may be relative or absolute.

@@ -17,7 +17,12 @@ const configMode = [
 const configFileRegex = new RegExp(`^(.+)\\.(${configMode.join('|')})\\.js(?:on)?$`)
 const schemaFileRegex = new RegExp(`^(.+)\\.schema\\.json$`)
 
-const packageDirectory = packageJSON.hasOwnProperty('configDirectory') ? resolve(root, packageJSON['configDirectory']) : null
+const packageDirectory = (
+  packageJSON &&
+  packageJSON.config &&
+  packageJSON.config['sane-config'] &&
+  packageJSON.config['sane-config'].directory
+) ? resolve(root, packageJSON.config['sane-config'].directory) : null
 const customDirectory = argv.configDirectory || packageDirectory
 const configDirectory = customDirectory || DEFAULT_DIR
 
