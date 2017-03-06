@@ -9,6 +9,13 @@
 [![semantic-release](https://img.shields.io/badge/%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
+## Features
+* Simple usage: Just require `sane-config` in your code and the assigned variable will contain your config. DONE!
+* Automatically select matching configuration based on the `NODE_ENV`.
+* Lints configuration files when a `FILENAME.schema.json` is present.
+* Developers can overwrite any configuration in case they have special settings for their machine.
+* Supports `json` and `js` files.
+
 ## Install
 
 ```js
@@ -40,7 +47,7 @@ merge the configurations in the following order:
 
 Like this, you can add `paths.default.js` to your repository while the production environment easily uses the `paths.production.js` and others can overwrite configs at any time with a `paths.local.js`
 
-## Usage
+## Usage via Node
 
 ```js
 import config from 'sane-config'
@@ -49,18 +56,22 @@ import config from 'sane-config'
 console.log(config.section.anyProperty)
 ```
 
-### with webpack
+### Usage within Webpack apps
 
-Just add it as global via DefinePlugin. This ensures it only runs once and stores
-the final config in your app.
+Just add your processed config as global via the DefinePlugin. This ensures it only runs once, does not fail
+since sane-config uses the [file system](https://nodejs.org/api/fs.html) to read your configs.
 
 ```js
+import config from 'sane-config'
+
+...
 new Webpack.DefinePlugin({
   APP_CONFIG: JSON.stringify(config)
 })
+...
 ```
 
-Makre sure that you don't forget the `JSON.stringify()`
+Make sure that you don't forget the `JSON.stringify()`
 
 ## Validation
 sane-config also provides a way to validate your configuration. In later states of your project, this can help a lot to ensure configuration of new or long-time inactive team members are up to date.
