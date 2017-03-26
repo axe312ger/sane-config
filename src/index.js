@@ -5,17 +5,15 @@ const findRoot = require('find-root')
 const Debug = require('debug')
 const { validate } = require('jsonschema')
 
-const debug = Debug('config')
+const debug = Debug('sane-config')
 const root = findRoot(process.cwd())
 const packageJSON = require(resolve(root, 'package.json'))
 const DEFAULT_DIR = resolve(root, 'config')
-const configMode = [
-  'default',
-  process.env.NODE_ENV,
-  'local'
-]
-const configFileRegex = new RegExp(`^(.+)\\.(${configMode.join('|')})\\.js(?:on)?$`)
+const levelHierarchy = ['default', process.env.NODE_ENV, 'local']
+const configFileRegex = new RegExp(`^(?:([^.]+)|(.+)\\.(${levelHierarchy.join('|')}))\\.js(?:on)?$`)
 const schemaFileRegex = new RegExp(`^(.+)\\.schema\\.json$`)
+
+debug(`Determined file hierachy: ${levelHierarchy.join(' -> ')}.`)
 
 const packageDirectory = (
   packageJSON &&
@@ -56,10 +54,11 @@ const configFiles = files
     return {
       path: resolve(configDirectory, name),
       name,
-      section: result[1],
-      level: result[2]
+      section: result[1] || result[2],
+      level: result[3] || 'default'
     }
   })
+  .filter((module) => module.level !== 'schema')
   // Sort by priority
   .sort((a, b) => {
     const nameCompare = a.section.localeCompare(b.section)
@@ -68,8 +67,8 @@ const configFiles = files
       return nameCompare
     }
 
-    const aPosition = configMode.indexOf(a.level)
-    const bPosition = configMode.indexOf(b.level)
+    const aPosition = levelHierarchy.indexOf(a.level)
+    const bPosition = levelHierarchy.indexOf(b.level)
 
     return aPosition - bPosition
   })
@@ -79,15 +78,15 @@ const config = configFiles.reduce((config, file) => {
   const { section, path, name } = file
   const fileConfig = require(path)
 
+  debug(`Loading ${name}...`)
+
+  // Validation
   if (schemas.has(section)) {
     const validation = validate(fileConfig, schemas.get(section))
     if (validation.errors.length) {
       const message = `Found ${validation.errors.length} validation errors in ${name}`
       debug(`${message}:`)
       validation.errors.map((error) => debug(error.message))
-      if (validation.errors.length === 1) {
-        throw validation.errors[0]
-      }
       const error = new Error(message)
       error.errors = validation.errors
       throw error

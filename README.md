@@ -15,6 +15,7 @@
 * Lints configuration files when a `FILENAME.schema.json` is present.
 * Developers can overwrite any configuration in case they have special settings for their machine.
 * Supports `json` and `js` files.
+* Easy debugging via [debug](https://github.com/visionmedia/debug) -> `DEBUG=sane-config`
 
 ## Install
 
