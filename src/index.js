@@ -7,7 +7,6 @@ const { validate } = require('jsonschema')
 
 const debug = Debug('sane-config')
 const root = findRoot(process.cwd())
-const packageJSON = require(resolve(root, 'package.json'))
 const DEFAULT_DIR = resolve(root, 'config')
 const levelHierarchy = ['default', process.env.NODE_ENV, 'local']
 const configFileRegex = new RegExp(`^(?:([^.]+)|(.+)\\.(${levelHierarchy.join('|')}))\\.js(?:on)?$`)
@@ -15,21 +14,32 @@ const schemaFileRegex = new RegExp(`^(.+)\\.schema\\.json$`)
 
 debug(`Determined file hierachy: ${levelHierarchy.join(' -> ')}.`)
 
-const packageDirectory = (
-  packageJSON &&
-  packageJSON.config &&
-  packageJSON.config['sane-config'] &&
-  packageJSON.config['sane-config'].directory
-) ? resolve(root, packageJSON.config['sane-config'].directory) : null
-const customDirectory = argv.configDirectory || packageDirectory
-const configDirectory = customDirectory || DEFAULT_DIR
+let packageDirectory
+
+// Get configuration from npm config
+if ('npm_package_config_sane_config_directory' in process.env) {
+  packageDirectory = process.env.npm_package_config_sane_config_directory
+} else {
+  // Fallback to package.json analysis when script was not called via npm
+  const packageJSON = require(resolve(root, 'package.json'))
+  if (
+    packageJSON &&
+    packageJSON.config &&
+    packageJSON.config['sane-config'] &&
+    packageJSON.config['sane-config'].directory
+  ) {
+    packageDirectory = packageJSON.config['sane-config'].directory
+  }
+}
+
+const configDirectory = argv.configDirectory || packageDirectory || DEFAULT_DIR
 
 debug(`Reading configuration from ${configDirectory}`)
 
 // Look for matching config files and sort them by name and priority
 const files = readdirSync(configDirectory)
 
-// Gather schema files
+// Gather validation schema files
 const schemas = files
   .filter((name) => name.match(schemaFileRegex))
   .map((name) => {
@@ -47,6 +57,7 @@ const schemas = files
     return map
   }, new Map())
 
+// Gather config files
 const configFiles = files
   .filter((name) => name.match(configFileRegex))
   .map((name) => {
@@ -59,7 +70,7 @@ const configFiles = files
     }
   })
   .filter((module) => module.level !== 'schema')
-  // Sort by priority
+  // Sort by priority for cascading merge
   .sort((a, b) => {
     const nameCompare = a.section.localeCompare(b.section)
 
@@ -93,6 +104,7 @@ const config = configFiles.reduce((config, file) => {
     }
   }
 
+  // Merge the file content into the fitting section
   return {
     ...config,
     [section]: {
