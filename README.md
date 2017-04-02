@@ -78,7 +78,7 @@ Let's assume we have the following configuration files in our configuration dire
 ```json
 {
   "user": "frank",
-  "port": 5432,
+  "port": 5432
 }
 ```
 
@@ -105,7 +105,7 @@ console.log(JSON.stringify(config, null, 2))
 // {
 //   "database": {
 //     "user": "frank",
-//     "port": 5432,
+//     "port": 5432
 //   }
 // }
 ```
@@ -118,7 +118,7 @@ console.log(JSON.stringify(config, null, 2))
 // {
 //   "database": {
 //     "user": "peter", <-- user got overwritten
-//     "port": 5432,
+//     "port": 5432
 //   }
 // }
 ```
